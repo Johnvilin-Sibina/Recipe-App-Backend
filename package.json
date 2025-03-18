@@ -1,0 +1,23 @@
+{
+  "name": "tastytrove-backend",
+  "version": "1.0.0",
+  "description": "This is a recipe sharing app where users can find recepies and share their recipies with others.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Johnvilin Sibina",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
+    "nodemailer": "^6.10.0",
+    "nodemon": "^3.1.9"
+  }
+}
