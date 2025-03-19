@@ -8,9 +8,9 @@ import { sendLink } from "../Services/Nodemailer.js";
 dotenv.config();
 
 export const registerUser = async (req, res, next) => {
-  const { userName, email, password, phoneNumber } = req.body;
+  const { userName, email, password } = req.body;
 
-  if (!userName || !email || !password || !phoneNumber) {
+  if (!userName || !email || !password) {
     return next(errorHandler(400, "All the fields are required"));
   }
 
@@ -20,8 +20,7 @@ export const registerUser = async (req, res, next) => {
     const newUser = new User({
       userName:userName,
       email:email,
-      password: hashedPassword,
-      phoneNumber: phoneNumber
+      password: hashedPassword
     });
     await newUser.save();
     res.status(200).json({ message: "User registered successfully",newUser });
@@ -73,8 +72,8 @@ export const loginUser = async (req, res, next) => {
           Math.random().toString(36).slice(-8);
         const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
         const newUser = new User({
-          username:
-            name.toLowerCase().split(" ").join("") +
+          userName:
+            name.split(" ").join("") +
             Math.random().toString(9).slice(-4),
           email,
           password: hashedPassword,
@@ -84,7 +83,7 @@ export const loginUser = async (req, res, next) => {
         await newUser.save();
   
         const token = jwt.sign(
-          { id: newUser._id, isAdmin: newUser.isAdmin },
+          { id: newUser._id },
           process.env.JWT_SECRET_KEY
         );
         const { password: passkey, ...rest } = newUser._doc;
@@ -123,19 +122,19 @@ export const forgotPassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { newPassword, confirmPassword } = req.body;
-    if (newPassword !== confirmPassword) {
-      return next(errorHandler(401, "Password does not match"));
+    const { newPassword, confirmNewPassword } = req.body;
+    if (newPassword !== confirmNewPassword) {
+      return next(errorHandler(400, "Password does not match"));
     }
     const user = await User.findById(id);
     if (!user) {
-      return next(errorHandler(401, "User not found"));
+      return next(errorHandler(404, "User not found"));
     }
-    const hashPassword = await bcryptjs.hashSync(newPassword, 10);
+    const hashPassword = await bcryptjs.hash(newPassword, 10);
     user.password = hashPassword;
     await user.save();
     res.status(200).json({ message: "Password Reset Successfully" });
   } catch (error) {
-    return next(errorHandler(error.message));
+    return next(errorHandler(500, error.message));
   }
 };
