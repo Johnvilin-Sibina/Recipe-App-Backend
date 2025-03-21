@@ -11,7 +11,6 @@ export const addRecipe = async (req, res, next) => {
             return next(errorHandler(400, "All fields are required"));
         }
 
-        // Create a new recipe
         const newRecipe = new Recipe({
             user,
             title,
@@ -22,7 +21,6 @@ export const addRecipe = async (req, res, next) => {
             image 
         });
 
-        // Save to the database
         await newRecipe.save();
 
         res.status(200).json({message: "Recipe added successfully", recipe: newRecipe });
@@ -31,3 +29,35 @@ export const addRecipe = async (req, res, next) => {
         return next(errorHandler(500, error.message));
     }
 };
+
+export const getRecipes = async (req, res, next) => {
+    try {
+        const recipes = await Recipe.find(); 
+
+        if (!recipes || recipes.length === 0) {
+            return next(errorHandler(404, "No recipes found"));
+        }
+
+        res.status(200).json({message:"Recipes fetched successfully", recipes });
+    } catch (error) {
+        return next(errorHandler(500, error.message));
+    }
+};
+
+export const getRecipeById = async (req, res, next) => {
+    try {
+        const { id } = req.params; 
+        const recipe = await Recipe.findById(id); 
+
+        if (!recipe) {
+            return next(errorHandler(404, "Recipe not found"));
+        }
+
+        res.status(200).json({ message:"Recipe Fetched Successfully", recipe });
+    } catch (error) {
+        console.log(error.message);
+        return next(errorHandler(500, error.message));
+    }
+};
+
+
