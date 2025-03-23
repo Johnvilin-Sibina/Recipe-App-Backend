@@ -66,58 +66,18 @@ export const updateUser = async (req, res, next) => {
     }
 };
 
-// export const updateUser = async (req, res, next) => {
-//     const { id } = req.params;
-//     const { userName, email, password } = req.body;
+export const deleteUser = async(req,res,next)=>{
+    try {
+        const {id} = req.params
 
-//     try {
-//         // Validate ObjectId
-//         if (!mongoose.Types.ObjectId.isValid(id)) {
-//             return next(errorHandler(400, "Invalid User ID"));
-//         }
+        const deletedUser = await User.findOneAndDelete({_id:id})
+        if (!deletedUser) {
+            return next(errorHandler(404, "User not found"));
+        }
 
-//         // Find user by ID
-//         const user = await User.findById(id);
-//         if (!user) {
-//             return next(errorHandler(404, "User not found"));
-//         }
-
-//         // Ensure the logged-in user is updating their own profile
-//         if (req.user.id.toString() !== id) {
-//             return next(errorHandler(401, "Unauthorized to update the profile"));
-//         }
-
-//         // Create an object to hold updated fields
-//         let updatedFields = { userName, email };
-
-//         // If password is provided, hash it before updating
-//         if (password) {
-//             const hashedPassword = bcryptjs.hashSync(password, 10);
-//             updatedFields.password = hashedPassword;
-//         }
-
-//         // Update user details
-//         const updatedUser = await User.findByIdAndUpdate(
-//             id,
-//             { $set: updatedFields },
-//             { new: true, runValidators: true }
-//         );
-
-//         // Check if update was successful
-//         if (!updatedUser) {
-//             return next(errorHandler(404, "User update failed"));
-//         }
-
-//         // Remove password from response
-//         const { password: _, ...rest } = updatedUser._doc;
-
-//         res.status(200).json({
-//             message: "User updated successfully",
-//             user: rest,
-//         });
-
-//     } catch (error) {
-//         console.log(error.message);
-//         return next(errorHandler(500, "Something went wrong"));
-//     }
-// };
+        res.status(200).json({message:"User account deleted successfully"})
+    } catch (error) {
+       console.log(error.message)
+       return next(errorHandler(500,error.message)) 
+    }
+}
