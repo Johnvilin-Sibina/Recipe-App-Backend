@@ -58,8 +58,6 @@ export const updateUser = async (req, res, next) => {
             message: "User updated successfully",
             rest,
         });
-        console.log(rest)
-
     } catch (error) {
         return next(errorHandler(500, error.message));
     }
