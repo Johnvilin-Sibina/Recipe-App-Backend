@@ -1,3 +1,4 @@
+// Function to create a structured error response
 export const errorHandler = (statusCode, message) => {
     const error = new Error();
     error.statusCode = statusCode;

@@ -2,11 +2,11 @@ import {errorHandler} from "../Utils/Error.js";
 import Recipe from "../Models/recipeModel.js";
 
 
+// Function to add a new recipe
 export const addRecipe = async (req, res, next) => {
     try {
         const { title, description, cookingTime, ingredients, instructions, user, image } = req.body;
 
-        // Validate required fields
         if (!title || !description || !cookingTime || !ingredients || !instructions || !image|| !user) {
             return next(errorHandler(400, "All fields are required"));
         }
@@ -30,6 +30,8 @@ export const addRecipe = async (req, res, next) => {
     }
 };
 
+
+// Function to fetch all recipes
 export const getRecipes = async (req, res, next) => {
     try {
         const recipes = await Recipe.find(); 
@@ -44,6 +46,8 @@ export const getRecipes = async (req, res, next) => {
     }
 };
 
+
+// Function to get a specific recipe by ID
 export const getRecipeById = async (req, res, next) => {
     try {
         const { id } = req.params; 
@@ -55,7 +59,6 @@ export const getRecipeById = async (req, res, next) => {
 
         res.status(200).json({ message:"Recipe Fetched Successfully", recipe });
     } catch (error) {
-        console.log(error.message);
         return next(errorHandler(500, error.message));
     }
 };

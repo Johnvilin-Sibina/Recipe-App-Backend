@@ -8,16 +8,18 @@ import userRoute from './Routers/userRouter.js'
 
 dotenv.config()
 
+// Initialize Express app
 const app = express()
 
+// Middleware setup
 app.use(
     cors({
-        origin:"*",
+        origin:"*",     // Configures CORS to allow requests from all origins.
         credentials:true
     })
 )
 
-app.use(express.json())
+app.use(express.json())  // Parse incoming JSON requests
 
 connectDB()
 
@@ -43,6 +45,7 @@ app.use((err,req,res,next)=>{
     })
 })
 
+// Start server
 app.listen(process.env.PORT,()=>{
     console.log("Server is running")
 })
