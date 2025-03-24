@@ -1,6 +1,5 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { errorHandler } from "../Utils/Error.js";
 
 dotenv.config();
 
