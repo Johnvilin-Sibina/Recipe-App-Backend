@@ -25,9 +25,9 @@ export const sendLink = async (email, token, userId) => {
       text: `http://localhost:5173/resetpassword/${userId}/${token}`,
       html: `<p>A request is made to reset your password. If it is made by you click the following link to proceed: <a href=http://localhost:5173/resetpassword/${userId}/${token}">Reset Password</a>. If it is not done by you, ignore the mail.</p>`,
     });
-    res.status(200).json({message:"Mail Sent Successfully"})
+    console.log("Mail Sent Successfully:", info.response);
   } catch (error) {
-    return next(errorHandler(500,"Something went wrong. Unable to Send Mail"))
+    console.error("Error Sending Mail:", error);
   }
 }
 main()
